@@ -24,6 +24,9 @@ runs:
 
         php vendor/bin/satis build ${{ inputs.satis_config }} -n
       shell: bash
+    - run: |
+        rm -rf composer.json composer.lock vendor/
+      shell: bash
 
 branding:
   icon: 'download-cloud'
