@@ -1,0 +1,22 @@
+name: Test Suite
+
+on:
+  - push
+
+jobs:
+  build-dir-exists:
+    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cp test/satis.json .
+          mkdir dist
+      - name: Run action
+        uses: ./
+        with:
+          token: ${{ github.token }}
+      - run: |
+          ls -lha public/
+        name: Check satis build dir

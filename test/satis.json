@@ -1,0 +1,8 @@
+{
+  "name": "cool/test",
+  "homepage": "https://satis-test",
+  "output-dir": "public",
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/symfony/messenger" }
+  ]
+}

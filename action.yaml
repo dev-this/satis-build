@@ -15,17 +15,24 @@ runs:
   steps:
     - env:
         COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ inputs.token }}"}}'
+        COMPOSER_HOME: /tmp/.satis-build
       run: |
-        echo '{"require": {"composer/satis": "dev-main"}}' > composer.json
+        mkdir /tmp/.satis-build
+        echo "{}" > /tmp/.satis-build/composer.json
 
-        composer require composer/satis --prefer-dist \
-          --no-progress --no-interaction -o \
+        composer g require composer/satis:dev-main --prefer-dist \
+          --no-cache --no-progress --no-interaction -o \
           --ignore-platform-reqs
 
-        php vendor/bin/satis build ${{ inputs.satis_config }} -n
+        php $COMPOSER_HOME/vendor/bin/satis build ${{ inputs.satis_config }} -n
+
+        if cat ${{ inputs.satis_config }} | jq .archive -e; then
+          php $COMPOSER_HOME/vendor/bin/satis purge ${{ inputs.satis_config }} -n
+        fi
+
       shell: bash
     - run: |
-        rm -rf composer.json composer.lock vendor/
+        rm -rf $COMPOSER_HOME
       shell: bash
 
 branding:
