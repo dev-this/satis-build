@@ -18,7 +18,15 @@ runs:
         COMPOSER_HOME: /tmp/.satis-build
       run: |
         mkdir /tmp/.satis-build
-        echo "{}" > /tmp/.satis-build/composer.json
+        cat << 'EOF' > /tmp/.satis-build/composer.json
+        {
+          "config": {
+            "allow-plugins": {
+              "composer/satis": true
+            }
+          }
+        }
+        EOF
 
         composer g require composer/satis:dev-main --prefer-dist \
           --no-cache --no-progress --no-interaction -o \
